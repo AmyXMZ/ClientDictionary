@@ -9,10 +9,11 @@ public class ClientDictionary {
     // IP and port
     private static String ip = "localhost";
     private static int port = 3005;
-    private Gson gson = new Gson();
+
 
     public static void main(String[] args)
     {
+        ;
         // read message from the server
         InputStreamReader inputStreamReader = null;
         OutputStreamWriter outputStreamWriter = null;
@@ -33,11 +34,21 @@ public class ClientDictionary {
             DataInputStream input = new DataInputStream(socket.getInputStream());
 
             DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-            String sendData ="I want to connect";
+            System.out.println(input.readUTF());
+            System.out.println(input.readUTF());
+            //String sendData ="I want to connect";
 
-            output.writeUTF(sendData);
-            System.out.println("Data sent to Server--> " + sendData);
-            output.flush();
+            //output.writeUTF(sendData);
+            //System.out.println("Data sent to Server--> " + sendData);
+            RequestMessage request = new RequestMessage("querymeanings", "cc");
+            String jsonRequest = new Gson().toJson(request);
+            output.writeUTF(jsonRequest);
+            //display server response
+            String jsonResponse = input.readUTF();
+            ResponseMessage response = new Gson().fromJson(jsonResponse, ResponseMessage.class);
+
+            System.out.println("\n[Server Response]");
+            System.out.println("Status: " + response.getStatus() + response.getErrorMessage());
 
             boolean flag=true;
             while(flag)
