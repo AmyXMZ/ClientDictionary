@@ -1,6 +1,6 @@
 import javax.swing.*;
 import java.awt.event.*;
-public class DictionaryGUI {
+public class ClientGUI {
     public static void main(String[] args) {
         JFrame frame = new JFrame("My Dictionary");
 
