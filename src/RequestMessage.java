@@ -6,26 +6,19 @@ public class RequestMessage {
     public String meaning;
     public String newMeaning;
     public String oldMeaning;
-    public List<String> meanings;
+    //public List<String> meanings;
     public RequestMessage(String action, String word) {
         this.action = action; //querymeaning or removeword
         this.word = word;
     }
 
-    public RequestMessage(String action, String word, List<String> meanings) {
-        //for now, addword (and multiple new meanings if there is?)
-        this.action = action;
-        this.word = word;
-        this.meanings = meanings;//////
-    }
-
     public RequestMessage(String action, String word, String meaning) {
-        // addmeaning
+        //for now, addword (and multiple new meanings if there is?)
+        // add meaning
         this.action = action;
         this.word = word;
         this.meaning = meaning;
     }
-
     public RequestMessage(String action, String word, String oldMeaning, String newMeaning) {
         //updatemeaning
         this.action = action;
@@ -33,5 +26,13 @@ public class RequestMessage {
         this.oldMeaning = oldMeaning;
         this.newMeaning = newMeaning;
     }
+
+//    public RequestMessage(String action, String word, String meaning) {
+//        // addmeaning
+//        this.action = action;
+//        this.word = word;
+//        this.meaning = meaning;
+//    }
+
 
 }
