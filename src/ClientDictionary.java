@@ -1,6 +1,8 @@
 
 import java.io.*;
+import java.net.ConnectException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Scanner;
@@ -64,8 +66,8 @@ public class ClientDictionary {
         try {
             output.writeUTF(jsonRequest);
         } catch (IOException e) {
-            System.out.println("Cannot send quit request to the server.");
-            e.printStackTrace();
+            System.out.println("I/O error: cannot send quit request to the server.");
+           // e.printStackTrace();
         }
 
         finally {
@@ -81,8 +83,8 @@ public class ClientDictionary {
                 }
                 System.out.println("Client socket closed successfully.");
             } catch (IOException e) {
-                System.out.println("Failed to close client socket.");
-                e.printStackTrace();
+                System.out.println("I/O Error: failed to close client socket.");
+                //e.printStackTrace();
             }
         }
 
@@ -149,13 +151,15 @@ public class ClientDictionary {
         }
         catch (UnknownHostException e)
         {
-            e.printStackTrace();
-        }
-        catch (IOException e)
+            System.out.println("Error: unknown host. Double check the host ip and port.");
+        } catch (ConnectException e) {
+            System.out.println("Error: unable to connect to server.");
+        } catch (SocketException e) {
+            System.out.println("Error: client lost connection during communication with server.");
+        } catch (IOException e)
         {
-            e.printStackTrace();
+            System.out.println("I/O Error: client unable to communicate with server.");
         }
-
     }
 
 }
