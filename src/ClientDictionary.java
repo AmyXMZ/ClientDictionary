@@ -37,38 +37,62 @@ public class ClientDictionary {
     }
     //display server's response
     public void displayServerResponse(ResponseMessage r) throws IOException {
-        /// change!!!
+        // display the response from server to client
         String status = r.getStatus();
         System.out.println("\n[Server Response]");
         System.out.println("Status: " + status);
         if (status.equalsIgnoreCase("Success")) {
             List<String> meanings = r.getMeanings();
-            if (meanings != null && !meanings.isEmpty()) {
-                System.out.println("Meanings:");
-                for (String meaning : meanings) {
-                    System.out.println("- " + meaning);
+            if (meanings != null && !(meanings.isEmpty())) {
+                System.out.println("Meanings: ");
+                for (String m : meanings) {
+                    System.out.println("-> " + m);
                 }
             } else {
-                System.out.println("Operation completed successfully.");
+                System.out.println("Success: operation completed!");
             }
-        } else if ("Error".equalsIgnoreCase(status)) {
+        } else if (status.equalsIgnoreCase("Error")) {
             String errorMessage = r.getErrorMessage();
-            if (errorMessage != null && !errorMessage.isEmpty()) {
-                System.out.println("Error: " + errorMessage);
-            } else {
-                System.out.println("An unknown error occurred.");
-            }
-        } else {
-            System.out.println("Unexpected status from server.");
+            System.out.println("Error: " + errorMessage);
         }
     }
 
+    //client close connection (upon entering "quit")
+    public void clientCloseConnection(RequestMessage r){
+        RequestMessage quit = new RequestMessage("quit");
+        String jsonRequest = new Gson().toJson(quit);
+        try {
+            output.writeUTF(jsonRequest);
+        } catch (IOException e) {
+            System.out.println("Cannot send quit request to the server.");
+            e.printStackTrace();
+        }
+
+        finally {
+            try {
+                if (input != null) {
+                    input.close();
+                }
+                if (output != null) {
+                    output.close();
+                }
+                if (socket != null){
+                    socket.close();
+                }
+                System.out.println("Client socket closed successfully.");
+            } catch (IOException e) {
+                System.out.println("Failed to close client socket.");
+                e.printStackTrace();
+            }
+        }
+
+    }
     public static void main(String[] args)
     {
 
         try(Scanner scanner = new Scanner(System.in);)
         {
-            ClientDictionary clientInstance = new ClientDictionary("localhost", 3005);
+            ClientDictionary clientInstance = new ClientDictionary(ip, port);
             RequestMessage requestMessage = null;
             boolean flag = true;
             while(flag){
@@ -109,6 +133,7 @@ public class ClientDictionary {
                         requestMessage = new RequestMessage(action, word_meaning_update, old_meaning, new_meaning);
                         break;
                     case "quit":
+                        clientInstance.clientCloseConnection(requestMessage);
                         flag = false;
                         continue;
                     default:
@@ -119,20 +144,7 @@ public class ClientDictionary {
                     ResponseMessage response = clientInstance.sendToReceive(requestMessage);
                     clientInstance.displayServerResponse(response);
                 }
-
-
-
             }
-//            RequestMessage request = new RequestMessage("querymeanings", "cc");
-//            String jsonRequest = new Gson().toJson(request);
-//            output.writeUTF(jsonRequest);
-//            //display server response
-//            String jsonResponse = input.readUTF();
-//            ResponseMessage response = new Gson().fromJson(jsonResponse, ResponseMessage.class);
-//
-//            System.out.println("\n[Server Response]");
-//            System.out.println("Status: " + response.getStatus() + response.getErrorMessage());
-
 
         }
         catch (UnknownHostException e)
