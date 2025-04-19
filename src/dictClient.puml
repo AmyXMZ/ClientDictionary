@@ -1,0 +1,60 @@
+@startuml
+title Dictionary Client-Side UML
+
+class ClientDictionary {
+    - socket: Socket
+    - input: DataInputStream
+    - output: DataOutputStream
+    - frame: JFrame
+    + ClientDictionary(ip: String, port: int)
+    + sendToReceive(r: RequestMessage): ResponseMessage
+    + clientCloseConnection(): void
+    + main(args: String[]): void
+}
+
+class ClientGUI {
+    - client: ClientDictionary
+    - frame: JFrame
+    - select: JComboBox<String>
+    - word: JTextField
+    - meaning: JTextField
+    - oldmeaning: JTextField
+    - newmeaning: JTextField
+    - submit: JButton
+    - responseArea: JTextArea
+    + ClientGUI(ip: String, port: int)
+    - initializeFrame(): void
+    - prepareComponents(): void
+    - showHideInput(): void
+    - handleRequest(): void
+    - displayServerResponse(response: ResponseMessage): void
+}
+
+class RequestMessage {
+    + action: String
+    + word: String
+    + meaning: String
+    + oldMeaning: String
+    + newMeaning: String
+    + RequestMessage(action: String, word: String)
+    + RequestMessage(action: String, word: String, meaning: String)
+    + RequestMessage(action: String, word: String, oldMeaning: String, newMeaning: String)
+}
+
+class ResponseMessage {
+    + errorMessage: String
+    + status: String
+    + meanings: List<String>
+    + getErrorMessage(): String
+    + getStatus(): String
+    + getMeanings(): List<String>
+}
+
+' Relationships
+ClientGUI --> ClientDictionary
+ClientGUI --> RequestMessage
+ClientGUI --> ResponseMessage
+ClientDictionary --> RequestMessage
+ClientDictionary --> ResponseMessage
+
+@enduml

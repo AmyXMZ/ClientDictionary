@@ -41,26 +41,26 @@ public class ClientDictionary {
         return new Gson().fromJson(jsonResponse, ResponseMessage.class);
     }
     //display server's response
-    public void displayServerResponse(ResponseMessage r) throws IOException {
-        // display the response from server to client
-        String status = r.getStatus();
-        System.out.println("\n[Server Response]");
-        System.out.println("Status: " + status);
-        if (status.equalsIgnoreCase("Success")) {
-            List<String> meanings = r.getMeanings();
-            if (meanings != null && !(meanings.isEmpty())) {
-                System.out.println("Meanings: ");
-                for (String m : meanings) {
-                    System.out.println("-> " + m);
-                }
-            } else {
-                System.out.println("Success: operation completed!");
-            }
-        } else if (status.equalsIgnoreCase("Error")) {
-            String errorMessage = r.getErrorMessage();
-            System.out.println("Error: " + errorMessage);
-        }
-    }
+//    public void displayServerResponse(ResponseMessage r) throws IOException {
+//        // display the response from server to client
+//        String status = r.getStatus();
+//        System.out.println("\n[Server Response]");
+//        System.out.println("Status: " + status);
+//        if (status.equalsIgnoreCase("Success")) {
+//            List<String> meanings = r.getMeanings();
+//            if (meanings != null && !(meanings.isEmpty())) {
+//                System.out.println("Meanings: ");
+//                for (String m : meanings) {
+//                    System.out.println("-> " + m);
+//                }
+//            } else {
+//                System.out.println("Success: operation completed!");
+//            }
+//        } else if (status.equalsIgnoreCase("Error")) {
+//            String errorMessage = r.getErrorMessage();
+//            System.out.println("Error: " + errorMessage);
+//        }
+//    }
 
     //client close connection (upon entering "quit" for console only)
     public void clientCloseConnection(){
