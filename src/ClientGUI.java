@@ -162,7 +162,7 @@ public class ClientGUI {
 
         if (response.getStatus().equalsIgnoreCase("Success")) {
             List<String> meanings = response.getMeanings();
-            if (!meanings.isEmpty()) {
+            if (meanings != null && !(meanings.isEmpty())) {
                 sb.append("Meanings:\n");
                 for (String m : meanings) {
                     sb.append(" -> ").append(m).append("\n");
